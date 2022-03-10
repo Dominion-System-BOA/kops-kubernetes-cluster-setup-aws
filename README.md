@@ -29,17 +29,17 @@
  sudo su - kops
  sudo apt update -y
  sudo apt install unzip wget -y
- sudo curl https://s3.amazonaws.com/aws-cli/awscli-bundle.zip -o awscli-bundle.zip
- sudo apt install unzip python -y
- sudo unzip awscli-bundle.zip
- sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
+ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
  
  
 # 3) Install kops software on ubuntu instance:
 
  	#Install wget if not installed
  	sudo apt install wget -y
- 	sudo wget https://github.com/kubernetes/kops/releases/download/v1.22.0/kops-linux-amd64
+	sudo curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+
  	sudo chmod +x kops-linux-amd64
  	sudo mv kops-linux-amd64 /usr/local/bin/kops
  
@@ -66,7 +66,10 @@ You Created. --> Save.
 
 # 6) create an S3 bucket Execute below commond in KOPS Server use unique bucket name if you get bucket name exists error.
 
-	aws s3 mb s3://class21.k8s.local
+	aws s3 mb s3://cossyb.k8.local
+      aws s3 mb s3://bamen.local
+
+	
 	aws s3 ls
 	
     ex: s3://nubong.k8s.local
@@ -77,8 +80,8 @@ You Created. --> Save.
     vi .bashrc
 	
 	# Give Unique Name And S3 Bucket which you created.
-	export NAME=class21.k8s.local
-	export KOPS_STATE_STORE=s3://class21.k8s.local
+	export NAME=cossyb.k8s.local
+	export KOPS_STATE_STORE=s3://cossyb.k8.local
  
     source .bashrc
 	
@@ -89,13 +92,15 @@ You Created. --> Save.
 
 # 8) Create kubernetes cluster definitions on S3 bucket
 
-	kops create cluster --zones us-east-2c --networking weave --master-size t2.medium --master-count 1 --node-size t2.medium --node-count=2 ${NAME}
+
+	kops create cluster --zones us-west-1b --networking weave --master-size t2.medium --master-count 1 --node-size t2.medium --node-count=2 ${NAME}
 	
 	kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/id_rsa.pub
+	
 
 # 9) Create kubernetes cluser
 
-	 kops update cluster ${NAME} --yes
+	 kops update cluster ${NAME} --yes --admin
 
 # 10) Validate your cluster(KOPS will take some time to create cluster ,Execute below commond after 3 or 4 mins)
 
