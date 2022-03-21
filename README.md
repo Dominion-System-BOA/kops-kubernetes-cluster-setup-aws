@@ -48,8 +48,7 @@ sudo ./aws/install
  sudo curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
  sudo chmod +x ./kubectl
  sudo mv ./kubectl /usr/local/bin/kubectl
- aws s3 mb s3://nubonglegah.k8.local
- aws s3 ls
+ 
 
 # 5) Create an IAM role from AWS Console or CLI with below Policies.
 
@@ -66,7 +65,7 @@ You Created. --> Save.
 
 # 6) create an S3 bucket Execute below commond in KOPS Server use unique bucket name if you get bucket name exists error.
 
-	aws s3 mb s3://cossyb.k8.local
+	aws s3 mb s3://cossybagain.k8.local
       aws s3 mb s3://bamen.local
 
 	
@@ -80,8 +79,8 @@ You Created. --> Save.
     vi .bashrc
 	
 	# Give Unique Name And S3 Bucket which you created.
-	export NAME=cossyb.k8s.local
-	export KOPS_STATE_STORE=s3://cossyb.k8.local
+	export NAME=cossybagain.k8s.local
+	export KOPS_STATE_STORE=s3://cossybagain.k8.local
  
     source .bashrc
 	
@@ -93,7 +92,7 @@ You Created. --> Save.
 # 8) Create kubernetes cluster definitions on S3 bucket
 
 
-	kops create cluster --zones us-west-1b --networking weave --master-size t2.medium --master-count 1 --node-size t2.medium --node-count=2 ${NAME}
+	kops create cluster --zones us-west-1c --networking weave --master-size t2.medium --master-count 1 --node-size t2.medium --node-count=2 ${NAME}
 	
 	kops create secret --name ${NAME} sshpublickey admin -i ~/.ssh/id_rsa.pub
 	
@@ -107,8 +106,8 @@ You Created. --> Save.
 	   kops validate cluster
 
 # 11) connect to the master node
-    sh -i ~/.ssh/id_rsa ubuntu@ipAddress
-    ssh -i ~/.ssh/id_rsa ubuntu@3.90.203.23
+    ssh -i ~/.ssh/id_rsa ubuntu@ipAddress
+    ssh -i ~/.ssh/id_rsa ubuntu@13.57.191.179
 # 11) To list nodes
 
 	  kubectl get nodes 
